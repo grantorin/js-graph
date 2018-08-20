@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Graph</title>
+    <style>
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    #canv {
+        outline: 1px solid #ccc;
+        display: block;
+        height: 300px;
+        width: 900px;
+        margin: 10vh auto;
+        background: repeating-linear-gradient(transparent, transparent 20px, #ccc 22px),
+        repeating-linear-gradient(90deg, transparent, transparent 20px, #ccc 22px);
+    }
+    </style>
+</head>
+
+<body>
+    <canvas id="canv" width="900" height="300">Browser Not support of canvas</canvas>
+    <script>
+    let canvas = document.getElementById( 'canv' );
+    let ctx = canvas.getContext( '2d' );
+    ctx.fillStyle = 'red';
+    ctx.strokeStyle = 'blue';
+    ctx.lineWidth = '2';
+    let x = 0;
+    let y = 0;
+    let step = 20;
+    let timer;
+    let wWidth = 900;
+
+    renderPoint();
+
+    function renderPoint() {
+        ctx.moveTo(x,y);
+        y = xhr();
+        x += step;
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.fillRect( x - 3, y - 3, 6, 6 );
+        timer = setTimeout( renderPoint, step * 10 );
+        if ( x > wWidth ) clearTimeout( timer );
+    }
+
+    function xhr() {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open( 'GET', 'http://dev.stearling.net/api/point', false );
+
+        xhr.send();
+
+        if ( xhr.status != 200 ) {
+            console.error( xhr.status + ': ' + xhr.statusText );
+        } else {
+            return JSON.parse( xhr.responseText ).y;
+        }
+    }
+    </script>
+</body>
+
+</html>
